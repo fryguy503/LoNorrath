@@ -2847,6 +2847,18 @@ int Mob::CheckStackConflict(uint16 spellid1, int caster_level1, uint16 spellid2,
 
 	Log(Logs::Detail, Logs::Spells, "Check Stacking on old %s (%d) @ lvl %d (by %s) vs. new %s (%d) @ lvl %d (by %s)", sp1.name, spellid1, caster_level1, (caster1==nullptr)?"Nobody":caster1->GetName(), sp2.name, spellid2, caster_level2, (caster2==nullptr)?"Nobody":caster2->GetName());
 
+	if (IsEffectInSpell(spellid1, SE_MovementSpeed) && IsEffectInSpell(spellid2, SE_MovementSpeed))
+	{
+		if (!IsDetrimentalSpell(spellid1) && IsDetrimentalSpell(spellid2))
+		{
+			return 1;
+		}
+		if (IsDetrimentalSpell(spellid1) && !IsDetrimentalSpell(spellid2))
+		{
+			return -1;
+		}
+	}
+
 	if (spellid1 == spellid2 ) {
 		if (!IsStackableDot(spellid1) && !IsEffectInSpell(spellid1, SE_ManaBurn)) { // mana burn spells we need to use the stacking command blocks live actually checks those first, we should probably rework to that too
 			if (caster_level1 > caster_level2) { // cur buff higher level than new
@@ -2881,6 +2893,7 @@ int Mob::CheckStackConflict(uint16 spellid1, int caster_level1, uint16 spellid2,
 			return (0);
 		}
 	}
+
 
 	bool effect_match = true; // Figure out if we're identical in effects on all slots.
 	if (spellid1 != spellid2) {

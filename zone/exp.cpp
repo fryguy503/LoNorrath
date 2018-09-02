@@ -465,8 +465,15 @@ void Client::CalculateExp(uint32 in_add_exp, uint32 &add_exp, uint32 &add_aaxp, 
 			add_exp *= zone->level_exp_mod[GetLevel()].ExpMod;
 		}
 	}
+	
+	uint32 expcap = (GetEXPForLevel(GetLevel() + 1) - GetEXPForLevel(GetLevel())) * .14;
+	if (!resexp && add_exp > expcap) {
+		add_exp = expcap;
+	}
 
 	add_exp = GetEXP() + add_exp;
+
+
 }
 
 void Client::AddEXP(uint32 in_add_exp, uint8 conlevel, bool resexp) {
@@ -518,7 +525,6 @@ void Client::AddEXP(uint32 in_add_exp, uint8 conlevel, bool resexp) {
 		aaexp = 0;
 		m_epp.perAA = 0;
 	}
-
 	// Now update our character's normal and AA xp
 	SetEXP(exp, aaexp, resexp);
 }
@@ -734,7 +740,6 @@ void Client::SetEXP(uint32 set_exp, uint32 set_aaxp, bool isrezzexp) {
 			set_exp = expneeded;
 		}
 	}
-
 	//set the client's EXP and AAEXP
 	m_pp.exp = set_exp;
 	m_pp.expAA = set_aaxp;

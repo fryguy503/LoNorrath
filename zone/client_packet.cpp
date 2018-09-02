@@ -4583,7 +4583,6 @@ void Client::Handle_OP_ClientUpdate(const EQApplicationPacket *app) {
 
 		m_Proximity = glm::vec3(ppu->x_pos, ppu->y_pos, ppu->z_pos);
 	}
-
 	/* Update internal state */
 	m_Delta = glm::vec4(ppu->delta_x, ppu->delta_y, ppu->delta_z, EQ10toFloat(ppu->delta_heading));
 
@@ -4788,7 +4787,6 @@ void Client::Handle_OP_Consider(const EQApplicationPacket *app)
 	else
 		con->faction = 1;
 	con->level = GetLevelCon(tmob->GetLevel());
-
 	if (ClientVersion() <= EQEmu::versions::ClientVersion::Titanium) {
 		if (con->level == CON_GRAY)	{
 			con->level = CON_GREEN;
@@ -8120,6 +8118,10 @@ void Client::Handle_OP_Hide(const EQApplicationPacket *app)
 	float random = zone->random.Real(0, 100);
 	CheckIncreaseSkill(EQEmu::skills::SkillHide, nullptr, 5);
 	if (random < hidechance) {
+		auto formerpet = GetPet();
+		if (formerpet && formerpet->GetPetType() == petCharmed) {
+			formerpet->BuffFadeByEffect(SE_Charm);
+		}
 		auto outapp = new EQApplicationPacket(OP_SpawnAppearance, sizeof(SpawnAppearance_Struct));
 		SpawnAppearance_Struct* sa_out = (SpawnAppearance_Struct*)outapp->pBuffer;
 		sa_out->spawn_id = GetID();

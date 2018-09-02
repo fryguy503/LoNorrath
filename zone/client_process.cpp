@@ -1697,7 +1697,7 @@ void Client::OPGMTrainSkill(const EQApplicationPacket *app)
 			case EQEmu::skills::SkillFletching:
 			case EQEmu::skills::SkillJewelryMaking:
 			case EQEmu::skills::SkillPottery:
-				if(skilllevel >= RuleI(Skills, MaxTrainTradeskills)) {
+				if(skilllevel >= RuleI(Skills, MaxTrainTradeskills) && !EQEmu::skills::SkillResearch) {
 					Message_StringID(13, MORE_SKILLED_THAN_I, pTrainer->GetCleanName());
 					return;
 				}

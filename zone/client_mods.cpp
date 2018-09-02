@@ -292,7 +292,7 @@ int32 Client::CalcHPRegen(bool bCombat)
 	if (!bCombat && CanFastRegen() && (IsSitting() || CanMedOnHorse())) {
 		auto fast_mod = RuleI(Character, RestRegenHP); // TODO: this is actually zone based
 		auto max_hp = GetMaxHP();
-		int fast_regen = 6 * (max_hp / fast_mod);
+		int fast_regen = (max_hp * .08);
 		if (base < fast_regen) // weird, but what the client is doing
 			base = fast_regen;
 	}
@@ -1298,7 +1298,7 @@ int32 Client::CalcManaRegen(bool bCombat)
 	if (!bCombat && CanFastRegen() && (IsSitting() || CanMedOnHorse())) {
 		auto fast_mod = RuleI(Character, RestRegenMana); // TODO: this is actually zone based
 		auto max_mana = GetMaxMana();
-		int fast_regen = 6 * (max_mana / fast_mod);
+		int fast_regen = (max_mana * .06);
 		if (regen < fast_regen) // weird, but what the client is doing
 			regen = fast_regen;
 	}
